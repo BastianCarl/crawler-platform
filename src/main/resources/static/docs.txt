@@ -1,0 +1,41 @@
+spyder(crawler, bot sau scraper worker)
+    -  what pages should be crawled and what information should be extracted from the pages
+
+URL Frontier(Crawler Frontier)
+    - a queue of URLs that the crawler should visit next
+    Crawl Strategy
+        - uses crawling strategy like breadth-first search (BFS) or depth-first search (DFS) to determine the order of URL visits
+        - Possible problems:
+            - duplicate URLs
+                ?page=1
+                ?page=1&utm=abc
+                ?page=1#top
+            - infinite loops
+                ?page=1
+                ?page=2
+                ?page=3
+                ?page=1
+            - priority
+Downloader
+    - responsible for fetching the content of the web pages
+    - uses HTTP requests to retrieve the HTML content of the pages
+
+Parsing & Link Extraction
+    - responsible for parsing the HTML content and extracting relevant information and for discovering new URLs
+
+Deduplication & URL Canonicalization
+    - avoid processing the same pages with different URLs
+    - canonicalization is the process of converting different into a standard format
+
+Worker Pools
+    Does a crawl loop:
+      1. ia URL din frontier
+      2. descarcă pagina
+      3. parsează pagina
+      4. extrage date
+      5. extrage linkuri
+      6. trimite linkurile noi în frontier
+
+JavaScript Rendering & Browser Crawling
+    - simulates a real browser
+        - execute JavaScript code

@@ -1,0 +1,167 @@
+# =========================
+# IntelliJ IDEA
+# =========================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Eclipse
+# =========================
+.project
+.classpath
+.settings/
+bin/
+
+# =========================
+# NetBeans
+# =========================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# =========================
+# Maven
+# =========================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+build/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+*.out
+
+# =========================
+# Spring Boot
+# =========================
+application-local.yml
+application-local.yaml
+application-dev.yml
+application-dev.yaml
+application-secrets.yml
+application-secrets.yaml
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# =========================
+# Coverage / Reports
+# =========================
+coverage/
+jacoco.exec
+/site/
+reports/
+
+# =========================
+# Docker
+# =========================
+docker-data/
+*.pid
+
+# =========================
+# Playwright / Browser
+# =========================
+playwright-report/
+test-results/
+browser-data/
+chrome-data/
+.chromium/
+
+# =========================
+# Crawling artifacts
+# =========================
+crawl-data/
+snapshots/
+downloads/
+screenshots/
+html-dumps/
+exports/
+
+# =========================
+# Database files
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# Generated files
+# =========================
+generated/
+generated-sources/
+
+# =========================
+# Mac/Linux
+# =========================
+*.lock
+
+# =========================
+# Java
+# =========================
+hs_err_pid*
+replay_pid*
+
+# =========================
+# Kubernetes
+# =========================
+*.kubeconfig
+
+# =========================
+# Terraform
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# =========================
+# Secrets / Certificates
+# =========================
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+secrets/
