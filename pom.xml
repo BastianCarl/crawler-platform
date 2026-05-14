@@ -12,7 +12,6 @@
     <name>crawler-parent</name>
     <description>crawler multi-module parent</description>
 
-    <!-- 1) Aici listezi modulele EXACT cum se numesc directoarele -->
     <modules>
         <module>crawler-api</module>
         <module>crawler-common</module>
@@ -30,7 +29,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!-- 2) BOM: versiuni consistente pt toate modulele -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -43,7 +41,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- 3) Plugin management comun -->
     <build>
         <pluginManagement>
             <plugins>
@@ -64,4 +61,11 @@
         </pluginManagement>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>browser-worker-client</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 </project>
