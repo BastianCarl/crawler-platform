@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ScrapeController {
 
-    private final ScrapeService fetcher;
+    private final ScrapeService scrapeService;
 
     @PostMapping("/scrape")
     public ProductScrapeResponse scrape(@RequestBody ProductScrapeRequest request) {
-        return fetcher.scrape(request.url());
+        return scrapeService.scrape(request.url());
     }
 }
