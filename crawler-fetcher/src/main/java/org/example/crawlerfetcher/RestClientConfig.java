@@ -19,8 +19,8 @@ public class RestClientConfig {
     @Bean
     public RestClient restClient() {
         RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(Timeout.ofSeconds(5))
-                .setResponseTimeout(Timeout.ofSeconds(15))
+                .setConnectTimeout(Timeout.ofSeconds(120))
+                .setResponseTimeout(Timeout.ofSeconds(120))
                 .build();
 
         CloseableHttpClient httpClient = HttpClients.custom()

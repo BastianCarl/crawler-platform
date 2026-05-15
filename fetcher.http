@@ -1,0 +1,11 @@
+POST http://localhost:8080/fetch
+Content-Type: application/json
+
+{
+  "url": "https://www.emag.ro/periuta-de-dinti-colgate-extra-clean-medium-2-bucati-8714789732244/pd/DDQ5QBBBM/?ref=infinite_scroll_personalized_0_17&provider=rec&recid=rec_115_2addafd102bdbb9cc426cff4ff4d15487ad7a0bbed4dab78713aab06d1600149_1778859634&scenario_ID=115",
+  "headers": {
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache"
+  },
+  "timeout": "PT130S"
+}
