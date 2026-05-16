@@ -1,7 +1,5 @@
 package org.example.crawlerfetcher;
 
-import lombok.RequiredArgsConstructor;
-
 import org.example.browserworkerclient.dto.FetchResult;
 import org.example.browserworkerclient.dto.FetcherRequest;
 import org.springframework.beans.factory.annotation.Autowired;
