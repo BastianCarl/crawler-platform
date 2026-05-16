@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 @Component
 public class FetchService {
 
-    private  RestClient restClient;
+    private RestClient restClient;
     @Autowired
     public FetchService(RestClient restClient) {
         this.restClient = restClient;

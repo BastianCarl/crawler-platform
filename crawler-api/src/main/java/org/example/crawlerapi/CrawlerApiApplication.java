@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
         "org.example.crawlerapi",
         "org.example.crawlerfetcher",
+        "org.example.crawlerparser",
 })
 public class CrawlerApiApplication {
 

@@ -1,7 +1,7 @@
-package org.example.crawlerparse;
+package org.example.crawlerparser;
 
 import org.example.browserworkerclient.dto.FetchResult;
 
-public interface Parser<T> {
+public interface ProductParser<T> {
     T parse(FetchResult fetchResult);
 }

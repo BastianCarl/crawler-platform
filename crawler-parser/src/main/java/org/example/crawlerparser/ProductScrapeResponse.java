@@ -1,4 +1,4 @@
-package org.example.crawlerparse;
+package org.example.crawlerparser;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -9,7 +9,7 @@ public record ProductScrapeResponse(
 
         String title,
 
-        BigDecimal price,
+        String price,
 
         String currency,
 

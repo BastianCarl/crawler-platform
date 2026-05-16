@@ -1,4 +1,4 @@
-package org.example.crawlerparse;
+package org.example.crawlerparser;
 
 import org.example.browserworkerclient.dto.FetchResult;
 import org.jsoup.Jsoup;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Component
-public class EmagParser implements Parser {
+public class EmagProductParser implements ProductParser {
 
     private static final String TITLE_SELECTOR =
             "h1.page-title";
@@ -24,19 +24,13 @@ public class EmagParser implements Parser {
 
         String title = doc.select(TITLE_SELECTOR).text();
 
-        String rawPrice = doc.select(PRICE_SELECTOR).text();
+        String rawPrice = doc.select(PRICE_SELECTOR).first().text();
 
-        String normalizedPrice = rawPrice
-                .replace(".", "")
-                .replace(",", ".")
-                .replaceAll("[^0-9.]", "");
-
-        BigDecimal price = new BigDecimal(normalizedPrice);
 
         return new ProductScrapeResponse(
                 result.url(),
                 title,
-                price,
+                rawPrice,
                 "RON",
                 true,
                 null,

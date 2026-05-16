@@ -1,4 +1,4 @@
-package org.example.crawlerparse;
+package org.example.crawlerparser;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

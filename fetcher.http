@@ -1,8 +1,8 @@
-POST http://localhost:8080/fetch
+POST http://localhost:8080/scrape
 Content-Type: application/json
 
 {
-  "url": "https://www.emag.ro/periuta-de-dinti-colgate-extra-clean-medium-2-bucati-8714789732244/pd/DDQ5QBBBM/?ref=infinite_scroll_personalized_0_17&provider=rec&recid=rec_115_2addafd102bdbb9cc426cff4ff4d15487ad7a0bbed4dab78713aab06d1600149_1778859634&scenario_ID=115",
+  "url": "https://www.emag.ro/telefon-mobil-apple-iphone-17-pro-max-256gb-5g-deep-blue-mfyp4zd-a/pd/DL99FV3BM/?ref=profiled_categories_home_all_first_ml_1_3&provider=rec&recid=rec_106_ee2a7aebe0407e55a375300d5dad49bde90ba51532871043f353589455d7dbaa_1778921781&scenario_ID=106",
   "headers": {
     "Accept-Language": "en-US,en;q=0.9",
     "Cache-Control": "no-cache"
