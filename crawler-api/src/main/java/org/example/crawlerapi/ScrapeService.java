@@ -2,6 +2,7 @@ package org.example.crawlerapi;
 
 import org.example.browserworkerclient.dto.FetchResult;
 import org.example.browserworkerclient.dto.FetcherRequest;
+import org.example.crawlercore.CrawlService;
 import org.example.crawlerfetcher.FetchService;
 import org.example.crawlerparser.EmagLinkExtractor;
 import org.example.crawlerparser.EmagProductParser;
@@ -14,22 +15,15 @@ import java.util.Set;
 @Service
 public class ScrapeService {
 
-    private final FetchService fetchService;
-    private final EmagProductParser emagProductParser;
-    private final EmagLinkExtractor emagLinkExtractor;
+    private final CrawlService crawlService;
 
     @Autowired
-    public ScrapeService(FetchService fetchService, EmagProductParser emagProductParser, EmagLinkExtractor emagLinkExtractor) {
-        this.fetchService = fetchService;
-        this.emagProductParser = emagProductParser;
-        this.emagLinkExtractor = emagLinkExtractor;
+    public ScrapeService(CrawlService crawlService) {
+        this.crawlService = crawlService;
     }
 
-    public FetchResult scrape(FetcherRequest fetcherRequest) {
-        FetchResult fetchResult = fetchService.fetch(fetcherRequest);
-        ProductScrapeResponse productScrapeResponse =  emagProductParser.parse(fetchResult);
-        Set<String> links = emagLinkExtractor.extract(fetchResult);
-        return null;
+    public void scrape(FetcherRequest fetcherRequest) {
+         crawlService.crawl(fetcherRequest.url());
     }
 }
 

@@ -1,6 +1,5 @@
 package org.example.crawlerapi;
 
-import org.example.browserworkerclient.dto.FetchResult;
 import org.example.browserworkerclient.dto.FetcherRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,7 @@ public class ScrapeController {
     }
 
     @PostMapping("/scrape")
-    public FetchResult scrape(@RequestBody FetcherRequest request) {
-        return scrapeService.scrape(request);
+    public void scrape(@RequestBody FetcherRequest request) {
+        scrapeService.scrape(request);
     }
 }

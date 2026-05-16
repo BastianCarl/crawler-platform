@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "org.example.crawlerapi",
         "org.example.crawlerfetcher",
         "org.example.crawlerparser",
+        "org.example.crawlercore",
 })
 public class CrawlerApiApplication {
 
