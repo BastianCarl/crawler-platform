@@ -1,9 +1,8 @@
 package org.example.crawlercore;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Component;
 
 @Component
 public class InMemoryUrlDeduplicator {

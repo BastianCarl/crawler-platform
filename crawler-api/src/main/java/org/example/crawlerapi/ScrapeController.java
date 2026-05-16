@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ScrapeController {
 
-    private final ScrapeService  scrapeService;
+    private final ScrapeService scrapeService;
 
     @Autowired
     public ScrapeController(ScrapeService scrapeService) {

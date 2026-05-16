@@ -23,16 +23,11 @@ public class RestClientConfig {
                 .setResponseTimeout(Timeout.ofSeconds(120))
                 .build();
 
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(requestConfig)
-                .build();
+        CloseableHttpClient httpClient =
+                HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
 
-        HttpComponentsClientHttpRequestFactory factory =
-                new HttpComponentsClientHttpRequestFactory(httpClient);
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
-        return RestClient.builder()
-                .baseUrl(baseUrl)
-                .requestFactory(factory)
-                .build();
+        return RestClient.builder().baseUrl(baseUrl).requestFactory(factory).build();
     }
 }

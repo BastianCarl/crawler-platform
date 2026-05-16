@@ -1,19 +1,18 @@
 package org.example.crawlercore;
 
-import org.example.browserworkerclient.dto.FetcherRequest;
-import org.example.crawlerparser.ParsingResult;
-import org.example.crawlerparser.ServiceParser;
-import org.springframework.stereotype.Service;
-
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Optional;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import org.example.browserworkerclient.dto.FetcherRequest;
+import org.example.crawlerparser.ParsingResult;
+import org.example.crawlerparser.ServiceParser;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CrawlService {
@@ -25,10 +24,14 @@ public class CrawlService {
     private final EmagUrlFilter urlFilter;
     private static final int MAX_DEPTH = 2;
 
-    private static final Path VISITED_URLS_FILE =
-            Paths.get("visited-urls.txt");
+    private static final Path VISITED_URLS_FILE = Paths.get("visited-urls.txt");
 
-    public CrawlService(ServiceParser serviceParser, InMemoryUrlFrontier urlFrontier, InMemoryUrlDeduplicator urlDeduplicator, EmagUrlNormalizer normalizer, EmagUrlFilter urlFilter) {
+    public CrawlService(
+            ServiceParser serviceParser,
+            InMemoryUrlFrontier urlFrontier,
+            InMemoryUrlDeduplicator urlDeduplicator,
+            EmagUrlNormalizer normalizer,
+            EmagUrlFilter urlFilter) {
         this.serviceParser = serviceParser;
         this.urlFrontier = urlFrontier;
         this.urlDeduplicator = urlDeduplicator;
@@ -63,19 +66,17 @@ public class CrawlService {
             }
             saveVisitedUrl(currentUrl);
 
-            ParsingResult parsingResult = serviceParser.scrape(
-                    new FetcherRequest(
-                            currentUrl,
-                            Map.of(
-                                    "Accept-Language", "en-US,en;q=0.9",
-                                    "Cache-Control", "no-cache"
-                            ),
-                            Duration.of(3, ChronoUnit.MINUTES)
-                    )
-            );
+            ParsingResult parsingResult = serviceParser.scrape(new FetcherRequest(
+                    currentUrl,
+                    Map.of(
+                            "Accept-Language", "en-US,en;q=0.9",
+                            "Cache-Control", "no-cache"),
+                    Duration.of(3, ChronoUnit.MINUTES)));
 
-            parsingResult.links()
-                    .forEach(url -> urlFrontier.push(new CrawlJob(url, nextCrawlJob.get().depth() + 1)));
+            parsingResult
+                    .links()
+                    .forEach(url -> urlFrontier.push(
+                            new CrawlJob(url, nextCrawlJob.get().depth() + 1)));
         }
     }
 
@@ -85,8 +86,7 @@ public class CrawlService {
                     VISITED_URLS_FILE,
                     url + System.lineSeparator(),
                     StandardOpenOption.CREATE,
-                    StandardOpenOption.APPEND
-            );
+                    StandardOpenOption.APPEND);
 
         } catch (IOException e) {
 

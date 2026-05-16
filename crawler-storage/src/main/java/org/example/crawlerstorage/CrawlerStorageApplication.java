@@ -9,5 +9,4 @@ public class CrawlerStorageApplication {
     public static void main(String[] args) {
         SpringApplication.run(CrawlerStorageApplication.class, args);
     }
-
 }

@@ -9,5 +9,4 @@ public class CrawlerWorkerApplication {
     public static void main(String[] args) {
         SpringApplication.run(CrawlerWorkerApplication.class, args);
     }
-
 }

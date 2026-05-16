@@ -1,12 +1,11 @@
 package org.example.crawlerparser;
 
+import java.util.Set;
 import org.example.browserworkerclient.dto.FetchResult;
 import org.example.browserworkerclient.dto.FetcherRequest;
 import org.example.crawlerfetcher.FetchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class ServiceParser {
@@ -16,7 +15,8 @@ public class ServiceParser {
     private final EmagLinkExtractor emagLinkExtractor;
 
     @Autowired
-    public ServiceParser(FetchService fetchService, EmagProductParser emagProductParser, EmagLinkExtractor emagLinkExtractor) {
+    public ServiceParser(
+            FetchService fetchService, EmagProductParser emagProductParser, EmagLinkExtractor emagLinkExtractor) {
         this.fetchService = fetchService;
         this.emagProductParser = emagProductParser;
         this.emagLinkExtractor = emagLinkExtractor;
@@ -24,7 +24,7 @@ public class ServiceParser {
 
     public ParsingResult scrape(FetcherRequest fetcherRequest) {
         FetchResult fetchResult = fetchService.fetch(fetcherRequest);
-        ProductScrapeResponse productScrapeResponse =  emagProductParser.parse(fetchResult);
+        ProductScrapeResponse productScrapeResponse = emagProductParser.parse(fetchResult);
         Set<String> links = emagLinkExtractor.extract(fetchResult);
         return new ParsingResult(productScrapeResponse, links);
     }
