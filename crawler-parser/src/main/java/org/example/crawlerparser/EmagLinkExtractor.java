@@ -18,6 +18,7 @@ public class EmagLinkExtractor implements LinkExtractor {
             "/info",
             "/user",
             "/history"
+
     );
     @Override
     public Set<String> extract(FetchResult result) {
@@ -26,13 +27,20 @@ public class EmagLinkExtractor implements LinkExtractor {
 
         return doc.select("a[href]").stream()
                 .map(element -> element.absUrl("href"))
-                .filter(url -> url.startsWith("https://www.emag.ro"))
                 .filter(this::isAllowedUrl)
                 .collect(Collectors.toSet());
     }
 
-    private boolean isAllowedUrl(String url) {
-        return BLOCKED_PATHS.stream()
-                .noneMatch(url::contains);
+    private boolean isAllowedUrl(String href) {
+        return BLOCKED_PATHS.stream().noneMatch(href::contains) && isValidHref(href);
+    }
+
+    private boolean isValidHref(String href) {
+        return href != null
+                && !href.isBlank()
+                && !href.startsWith("#")
+                && !href.startsWith("javascript:")
+                && !href.startsWith("mailto:")
+                && !href.startsWith("tel:");
     }
 }

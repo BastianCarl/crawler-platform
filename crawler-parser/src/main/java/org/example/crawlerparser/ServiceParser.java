@@ -25,7 +25,7 @@ public class ServiceParser {
     public ParsingResult scrape(FetcherRequest fetcherRequest) {
         FetchResult fetchResult = fetchService.fetch(fetcherRequest);
         ProductScrapeResponse productScrapeResponse = emagProductParser.parse(fetchResult);
-        Set<String> links = emagLinkExtractor.extract(fetchResult);
-        return new ParsingResult(productScrapeResponse, links);
+        Set<String> href = emagLinkExtractor.extract(fetchResult);
+        return new ParsingResult(productScrapeResponse, href);
     }
 }

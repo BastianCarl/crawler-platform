@@ -2,20 +2,28 @@ package org.example.crawlercore;
 
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+
 @Component
 public class EmagUrlNormalizer implements UrlNormalizer {
 
     @Override
-    public String normalize(String url) {
-        int queryIndex = url.indexOf("?");
+    public String normalize(String baseUrl, String rawHref) {
+        int queryIndex = rawHref.indexOf("?");
         if (queryIndex != -1) {
-            url = url.substring(0, queryIndex);
+            rawHref = rawHref.substring(0, queryIndex);
         }
-        int hashIndex = url.indexOf("#");
+        int hashIndex = rawHref.indexOf("#");
         if (hashIndex != -1) {
-            url = url.substring(0, hashIndex);
+            rawHref = rawHref.substring(0, hashIndex);
         }
-        return removeTrailingSlash(lowercase(url));
+        rawHref = lowercase(rawHref);
+        rawHref = removeTrailingSlash(rawHref);
+        String resolved = String.valueOf(URI.create(baseUrl).resolve(rawHref));
+        if (!isSameDomain(resolved)) {
+            return null;
+        }
+        return resolved;
     }
     private String lowercase(String url) {
         return url.toLowerCase();
@@ -27,4 +35,20 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         }
         return url;
     }
+
+
+    private boolean isSameDomain(String url) {
+        try {
+            URI uri = URI.create(url);
+            String host = uri.getHost();
+            return host != null
+                    && host.endsWith("emag.ro");
+
+        } catch (Exception e) {
+
+            return false;
+        }
+    }
+
+
 }

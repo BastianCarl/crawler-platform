@@ -40,7 +40,7 @@ public class CrawlService {
     }
 
     public void crawl(String rootUrl) {
-        CrawlJob crawlJob = new CrawlJob(normalizer.normalize(rootUrl), 0);
+        CrawlJob crawlJob = new CrawlJob(normalizer.normalize(rootUrl, rootUrl), 0);
         urlFrontier.push(crawlJob);
 
         while (true) {
@@ -48,7 +48,11 @@ public class CrawlService {
             Optional<CrawlJob> nextCrawlJob = urlFrontier.poll();
 
             if (nextCrawlJob.isEmpty()) {
-                break;
+                continue;
+            } else{
+                if (nextCrawlJob.get().url() == null) {
+                    continue;
+                }
             }
 
             if (nextCrawlJob.get().depth() > MAX_DEPTH) {
@@ -64,7 +68,6 @@ public class CrawlService {
             if (!urlDeduplicator.shouldVisit(currentUrl)) {
                 continue;
             }
-            saveVisitedUrl(currentUrl);
 
             ParsingResult parsingResult = serviceParser.scrape(new FetcherRequest(
                     currentUrl,
@@ -76,9 +79,11 @@ public class CrawlService {
             parsingResult
                     .links()
                     .stream()
-                    .map(normalizer::normalize)
+                    .map(href ->normalizer.normalize(currentUrl, href))
                     .forEach(url -> urlFrontier.push(
                             new CrawlJob(url, nextCrawlJob.get().depth() + 1)));
+
+            saveVisitedUrl(currentUrl);
         }
     }
 

@@ -2,5 +2,5 @@ package org.example.crawlercore;
 
 public interface UrlNormalizer {
 
-    String normalize(String url);
+    String normalize(String baseUrl, String rawHref);
 }
