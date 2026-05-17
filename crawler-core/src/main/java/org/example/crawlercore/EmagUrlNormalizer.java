@@ -15,6 +15,16 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         if (hashIndex != -1) {
             url = url.substring(0, hashIndex);
         }
+        return removeTrailingSlash(lowercase(url));
+    }
+    private String lowercase(String url) {
+        return url.toLowerCase();
+    }
+
+    private String removeTrailingSlash(String url) {
+        if (url.endsWith("/")) {
+            return url.substring(0, url.length() - 1);
+        }
         return url;
     }
 }

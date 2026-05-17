@@ -24,7 +24,7 @@ public class CrawlService {
     private final EmagUrlFilter urlFilter;
     private static final int MAX_DEPTH = 2;
 
-    private static final Path VISITED_URLS_FILE = Paths.get("visited-urls.txt");
+    private static final Path VISITED_URLS_FILE = Paths.get("visited-urls2.txt");
 
     public CrawlService(
             ServiceParser serviceParser,
@@ -75,6 +75,8 @@ public class CrawlService {
 
             parsingResult
                     .links()
+                    .stream()
+                    .map(normalizer::normalize)
                     .forEach(url -> urlFrontier.push(
                             new CrawlJob(url, nextCrawlJob.get().depth() + 1)));
         }
