@@ -1,8 +1,7 @@
-package org.example.crawlercore;
-
-import org.springframework.stereotype.Component;
+package org.example.crawlercore.urlNormalizer;
 
 import java.net.URI;
+import org.springframework.stereotype.Component;
 
 @Component
 public class EmagUrlNormalizer implements UrlNormalizer {
@@ -25,6 +24,7 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         }
         return resolved;
     }
+
     private String lowercase(String url) {
         return url.toLowerCase();
     }
@@ -35,7 +35,6 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         }
         return url;
     }
-
 
     private boolean isSameDomain(String url) {
         try {
@@ -48,6 +47,4 @@ public class EmagUrlNormalizer implements UrlNormalizer {
             return false;
         }
     }
-
-
 }

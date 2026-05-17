@@ -1,4 +1,4 @@
-package org.example.crawlercore;
+package org.example.crawlercore.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,8 +10,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Optional;
 import org.example.browserworkerclient.dto.FetcherRequest;
-import org.example.crawlerparser.ParsingResult;
-import org.example.crawlerparser.ServiceParser;
+import org.example.crawlercore.model.CrawlJob;
+import org.example.crawlercore.urlDeduplicator.InMemoryUrlDeduplicator;
+import org.example.crawlercore.urlFilter.EmagUrlFilter;
+import org.example.crawlercore.urlFrontier.InMemoryUrlFrontier;
+import org.example.crawlercore.urlNormalizer.EmagUrlNormalizer;
+import org.example.crawlerparser.model.ParsingResult;
+import org.example.crawlerparser.service.ServiceParser;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,7 +54,7 @@ public class CrawlService {
 
             if (nextCrawlJob.isEmpty()) {
                 continue;
-            } else{
+            } else {
                 if (nextCrawlJob.get().url() == null) {
                     continue;
                 }
@@ -76,10 +81,8 @@ public class CrawlService {
                             "Cache-Control", "no-cache"),
                     Duration.of(3, ChronoUnit.MINUTES)));
 
-            parsingResult
-                    .links()
-                    .stream()
-                    .map(href ->normalizer.normalize(currentUrl, href))
+            parsingResult.links().stream()
+                    .map(href -> normalizer.normalize(currentUrl, href))
                     .forEach(url -> urlFrontier.push(
                             new CrawlJob(url, nextCrawlJob.get().depth() + 1)));
 

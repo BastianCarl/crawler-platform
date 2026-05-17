@@ -1,10 +1,11 @@
-package org.example.crawlerparser;
+package org.example.crawlerparser.productParser;
 
 import java.net.URI;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.example.browserworkerclient.dto.FetchResult;
+import org.example.crawlerparser.model.ProductScrapeResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;

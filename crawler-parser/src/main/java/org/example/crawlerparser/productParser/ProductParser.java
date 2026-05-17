@@ -1,4 +1,4 @@
-package org.example.crawlerparser;
+package org.example.crawlerparser.productParser;
 
 import org.example.browserworkerclient.dto.FetchResult;
 

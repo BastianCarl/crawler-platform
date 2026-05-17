@@ -1,8 +1,8 @@
-package org.example.crawlerparser;
+package org.example.crawlerparser.pageTypeDetector;
 
 import org.example.browserworkerclient.dto.FetchResult;
 
-public interface PageDetector {
+public interface PageTypeDetector {
 
     PageType getType(FetchResult result);
 }

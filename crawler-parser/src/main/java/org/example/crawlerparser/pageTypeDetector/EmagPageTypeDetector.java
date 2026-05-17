@@ -1,4 +1,4 @@
-package org.example.crawlerparser;
+package org.example.crawlerparser.pageTypeDetector;
 
 import org.example.browserworkerclient.dto.FetchResult;
 import org.jsoup.Jsoup;
@@ -8,15 +8,14 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmagPageDetector implements  PageDetector {
+public class EmagPageTypeDetector implements PageTypeDetector {
 
     @Override
     public PageType getType(FetchResult result) {
 
         if (isProduct(result)) {
             return PageType.PRODUCT;
-        } else
-            return PageType.NON_PRODUCT;
+        } else return PageType.NON_PRODUCT;
     }
 
     private boolean isProduct(FetchResult result) {
@@ -35,7 +34,6 @@ public class EmagPageDetector implements  PageDetector {
         }
         return false;
     }
-
 
     private boolean hasJsonLdProduct(FetchResult result) {
         Document doc = Jsoup.parse(result.html());

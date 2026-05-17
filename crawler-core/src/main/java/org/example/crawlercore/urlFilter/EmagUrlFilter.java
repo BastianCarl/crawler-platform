@@ -1,4 +1,4 @@
-package org.example.crawlercore;
+package org.example.crawlercore.urlFilter;
 
 import org.springframework.stereotype.Component;
 

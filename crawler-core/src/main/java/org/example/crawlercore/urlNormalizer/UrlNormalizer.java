@@ -1,4 +1,4 @@
-package org.example.crawlercore;
+package org.example.crawlercore.urlNormalizer;
 
 public interface UrlNormalizer {
 

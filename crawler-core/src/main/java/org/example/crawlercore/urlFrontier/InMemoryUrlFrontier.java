@@ -1,8 +1,9 @@
-package org.example.crawlercore;
+package org.example.crawlercore.urlFrontier;
 
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.example.crawlercore.model.CrawlJob;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package org.example.crawlerparser;
+package org.example.crawlerparser.model;
 
 import java.time.Instant;
 

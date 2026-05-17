@@ -1,7 +1,7 @@
 package org.example.crawlerapi;
 
 import org.example.browserworkerclient.dto.FetcherRequest;
-import org.example.crawlercore.CrawlService;
+import org.example.crawlercore.service.CrawlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

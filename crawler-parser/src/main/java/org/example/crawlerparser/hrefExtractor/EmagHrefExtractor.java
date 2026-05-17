@@ -1,6 +1,5 @@
-package org.example.crawlerparser;
+package org.example.crawlerparser.hrefExtractor;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.example.browserworkerclient.dto.FetchResult;
@@ -9,7 +8,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmagLinkExtractor implements LinkExtractor {
+public class EmagHrefExtractor implements HrefExtractor {
     private final Set<String> BLOCKED_PATHS = Set.of(
             "/filter",
             "/vendor",
@@ -22,8 +21,8 @@ public class EmagLinkExtractor implements LinkExtractor {
             "/pret,",
             "/stoc",
             "/noutati",
-            "/resigilate"
-    );
+            "/resigilate");
+
     @Override
     public Set<String> extract(FetchResult result) {
 
