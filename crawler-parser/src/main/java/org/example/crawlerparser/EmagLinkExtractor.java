@@ -17,8 +17,12 @@ public class EmagLinkExtractor implements LinkExtractor {
             "/help",
             "/info",
             "/user",
-            "/history"
-
+            "/history",
+            "/brand/",
+            "/pret,",
+            "/stoc",
+            "/noutati",
+            "/resigilate"
     );
     @Override
     public Set<String> extract(FetchResult result) {

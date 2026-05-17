@@ -41,8 +41,7 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         try {
             URI uri = URI.create(url);
             String host = uri.getHost();
-            return host != null
-                    && host.endsWith("emag.ro");
+            return host != null && host.equals("www.emag.ro");
 
         } catch (Exception e) {
 
