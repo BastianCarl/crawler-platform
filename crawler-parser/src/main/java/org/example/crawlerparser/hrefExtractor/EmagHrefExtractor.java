@@ -29,7 +29,7 @@ public class EmagHrefExtractor implements HrefExtractor {
         Document doc = Jsoup.parse(result.html());
 
         return doc.select("a[href]").stream()
-                .map(element -> element.absUrl("href"))
+                .map(element -> element.attr("href"))
                 .filter(this::isAllowedUrl)
                 .collect(Collectors.toSet());
     }
