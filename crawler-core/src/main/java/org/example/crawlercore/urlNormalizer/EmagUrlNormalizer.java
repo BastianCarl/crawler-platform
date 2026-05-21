@@ -1,13 +1,14 @@
 package org.example.crawlercore.urlNormalizer;
 
 import java.net.URI;
+import java.util.Set;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmagUrlNormalizer implements UrlNormalizer {
 
     @Override
-    public String normalize(String baseUrl, String rawHref) {
+    public String normalize(String parentUrl, String rawHref) {
         int queryIndex = rawHref.indexOf("?");
         if (queryIndex != -1) {
             rawHref = rawHref.substring(0, queryIndex);
@@ -18,11 +19,7 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         }
         rawHref = lowercase(rawHref);
         rawHref = removeTrailingSlash(rawHref);
-        String resolved = String.valueOf(URI.create(baseUrl).resolve(rawHref));
-        if (!isSameDomain(resolved)) {
-            return null;
-        }
-        return resolved;
+        return String.valueOf(URI.create(parentUrl).resolve(rawHref));
     }
 
     private String lowercase(String url) {
@@ -36,15 +33,9 @@ public class EmagUrlNormalizer implements UrlNormalizer {
         return url;
     }
 
-    private boolean isSameDomain(String url) {
-        try {
-            URI uri = URI.create(url);
-            String host = uri.getHost();
-            return host != null && host.equals("www.emag.ro");
-
-        } catch (Exception e) {
-
-            return false;
-        }
+    public Set<String> normalize(Set<String> urls, String parentUrl) {
+        return urls.stream()
+                .map(url -> normalize(parentUrl, url))
+                .collect(java.util.stream.Collectors.toSet());
     }
 }

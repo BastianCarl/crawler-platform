@@ -8,15 +8,15 @@ import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import org.example.browserworkerclient.dto.FetcherRequest;
 import org.example.crawlercore.model.CrawlJob;
-import org.example.crawlercore.urlDeduplicator.InMemoryUrlDeduplicator;
-import org.example.crawlercore.urlFilter.EmagUrlFilter;
 import org.example.crawlercore.urlFrontier.InMemoryUrlFrontier;
 import org.example.crawlercore.urlNormalizer.EmagUrlNormalizer;
+import org.example.crawlercore.validator.CrawlJobValidator;
 import org.example.crawlerparser.model.ParsingResult;
 import org.example.crawlerparser.service.ServiceParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,69 +24,37 @@ public class CrawlService {
 
     private final ServiceParser serviceParser;
     private final InMemoryUrlFrontier urlFrontier;
-    private final InMemoryUrlDeduplicator urlDeduplicator;
     private final EmagUrlNormalizer normalizer;
-    private final EmagUrlFilter urlFilter;
+    private final CrawlJobValidator crawlJobValidator;
     private static final int MAX_DEPTH = 2;
-
     private static final Path VISITED_URLS_FILE = Paths.get("visited-urls2.txt");
 
-    public CrawlService(
-            ServiceParser serviceParser,
-            InMemoryUrlFrontier urlFrontier,
-            InMemoryUrlDeduplicator urlDeduplicator,
-            EmagUrlNormalizer normalizer,
-            EmagUrlFilter urlFilter) {
+    @Autowired
+    public CrawlService(ServiceParser serviceParser, InMemoryUrlFrontier urlFrontier, EmagUrlNormalizer normalizer, CrawlJobValidator crawlJobValidator) {
         this.serviceParser = serviceParser;
         this.urlFrontier = urlFrontier;
-        this.urlDeduplicator = urlDeduplicator;
         this.normalizer = normalizer;
-        this.urlFilter = urlFilter;
+        this.crawlJobValidator = crawlJobValidator;
     }
 
     public void crawl(String rootUrl) {
-        CrawlJob crawlJob = new CrawlJob(normalizer.normalize(rootUrl, rootUrl), 0);
-        urlFrontier.push(crawlJob);
-
-        while (true) {
-
-            Optional<CrawlJob> nextCrawlJob = urlFrontier.poll();
-
-            if (nextCrawlJob.isEmpty()) {
-                continue;
-            } else {
-                if (nextCrawlJob.get().url() == null) {
-                    continue;
-                }
-            }
-
-            if (nextCrawlJob.get().depth() > MAX_DEPTH) {
-                break;
-            }
-
-            if (!urlFilter.shouldVisit(nextCrawlJob.get().url())) {
-                continue;
-            }
-
-            String currentUrl = nextCrawlJob.get().url();
-
-            if (!urlDeduplicator.shouldVisit(currentUrl)) {
-                continue;
-            }
-
+        CrawlJob rootCrawlJob = new CrawlJob(normalizer.normalize(rootUrl, rootUrl), 0);
+        urlFrontier.push(rootCrawlJob);
+        CrawlJob currentCrawlJob;
+        while ((currentCrawlJob = urlFrontier.poll().orElse(null)) != null) {
             ParsingResult parsingResult = serviceParser.scrape(new FetcherRequest(
-                    currentUrl,
+                    currentCrawlJob.url(),
                     Map.of(
                             "Accept-Language", "en-US,en;q=0.9",
                             "Cache-Control", "no-cache"),
                     Duration.of(3, ChronoUnit.MINUTES)));
 
-            parsingResult.links().stream()
-                    .map(href -> normalizer.normalize(currentUrl, href))
-                    .forEach(url -> urlFrontier.push(
-                            new CrawlJob(url, nextCrawlJob.get().depth() + 1)));
-
-            saveVisitedUrl(currentUrl);
+            Set<String> links = parsingResult.links();
+            links = normalizer.normalize(links, currentCrawlJob.url());
+            links = crawlJobValidator.collectCrawlableUrls(currentCrawlJob, MAX_DEPTH, links);
+            int currentDepth = currentCrawlJob.depth();
+            links.forEach(url -> urlFrontier.push(new CrawlJob(url, currentDepth + 1)));
+            saveVisitedUrl(currentCrawlJob.url());
         }
     }
 
@@ -99,7 +67,6 @@ public class CrawlService {
                     StandardOpenOption.APPEND);
 
         } catch (IOException e) {
-
             throw new RuntimeException(e);
         }
     }
