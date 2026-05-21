@@ -15,26 +15,18 @@ public class CrawlJobValidator {
     private final EmagUrlFilter urlFilter;
     private final InMemoryUrlDeduplicator deduplicator;
 
-    public CrawlJobValidator(
-            EmagUrlFilter urlFilter,
-            InMemoryUrlDeduplicator deduplicator) {
+    public CrawlJobValidator(EmagUrlFilter urlFilter, InMemoryUrlDeduplicator deduplicator) {
         this.urlFilter = urlFilter;
         this.deduplicator = deduplicator;
     }
 
-    public boolean isValid(CrawlJob job, int maxDepth) {
-
-        if (job == null) {
-            return false;
-        }
-
-        String url = job.url();
+    public boolean isValid(String url, int currentDepth, int maxDepth) {
 
         if (url == null || url.isBlank()) {
             return false;
         }
 
-        if (job.depth() > maxDepth) {
+        if (currentDepth > maxDepth) {
             return false;
         }
 
@@ -44,7 +36,6 @@ public class CrawlJobValidator {
 
         return deduplicator.shouldVisit(url);
     }
-
 
     public boolean isSameDomainAsParent(String parentUrl, String url) {
         try {
@@ -65,7 +56,7 @@ public class CrawlJobValidator {
     public Set<String> collectCrawlableUrls(CrawlJob parentJob, int maxDepth, Set<String> links) {
         Set<String> filtered = new HashSet<>();
         for (String link : links) {
-            if (isValid(new CrawlJob(link, parentJob.depth() + 1), maxDepth) && isSameDomainAsParent(link, parentJob.url())) {
+            if (isValid(link, parentJob.depth() + 1, maxDepth) && isSameDomainAsParent(link, parentJob.url())) {
                 filtered.add(link);
             }
         }

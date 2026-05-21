@@ -15,8 +15,9 @@ import org.example.crawlercore.urlFrontier.InMemoryUrlFrontier;
 import org.example.crawlercore.urlNormalizer.EmagUrlNormalizer;
 import org.example.crawlercore.validator.CrawlJobValidator;
 import org.example.crawlerparser.model.ParsingResult;
+import org.example.crawlerparser.pageTypeDetector.EmagPageTypeDetector;
+import org.example.crawlerparser.pageTypeDetector.PageType;
 import org.example.crawlerparser.service.ServiceParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,19 +27,26 @@ public class CrawlService {
     private final InMemoryUrlFrontier urlFrontier;
     private final EmagUrlNormalizer normalizer;
     private final CrawlJobValidator crawlJobValidator;
+    private final EmagPageTypeDetector pageTypeDetector;
     private static final int MAX_DEPTH = 2;
     private static final Path VISITED_URLS_FILE = Paths.get("visited-urls2.txt");
 
-    @Autowired
-    public CrawlService(ServiceParser serviceParser, InMemoryUrlFrontier urlFrontier, EmagUrlNormalizer normalizer, CrawlJobValidator crawlJobValidator) {
+
+    public CrawlService(ServiceParser serviceParser,
+                        InMemoryUrlFrontier urlFrontier,
+                        EmagUrlNormalizer normalizer,
+                        CrawlJobValidator crawlJobValidator,
+                        EmagPageTypeDetector pageTypeDetector
+    ) {
         this.serviceParser = serviceParser;
         this.urlFrontier = urlFrontier;
         this.normalizer = normalizer;
         this.crawlJobValidator = crawlJobValidator;
+        this.pageTypeDetector = pageTypeDetector;
     }
 
     public void crawl(String rootUrl) {
-        CrawlJob rootCrawlJob = new CrawlJob(normalizer.normalize(rootUrl, rootUrl), 0);
+        CrawlJob rootCrawlJob = new CrawlJob(normalizer.normalize(rootUrl, rootUrl), 0, PageType.NON_PRODUCT.priority);
         urlFrontier.push(rootCrawlJob);
         CrawlJob currentCrawlJob;
         while ((currentCrawlJob = urlFrontier.poll().orElse(null)) != null) {
@@ -53,7 +61,7 @@ public class CrawlService {
             links = normalizer.normalize(links, currentCrawlJob.url());
             links = crawlJobValidator.collectCrawlableUrls(currentCrawlJob, MAX_DEPTH, links);
             int currentDepth = currentCrawlJob.depth();
-            links.forEach(url -> urlFrontier.push(new CrawlJob(url, currentDepth + 1)));
+            links.forEach(url -> urlFrontier.push(new CrawlJob(url, currentDepth + 1, pageTypeDetector.getType(url).priority)));
             saveVisitedUrl(currentCrawlJob.url());
         }
     }

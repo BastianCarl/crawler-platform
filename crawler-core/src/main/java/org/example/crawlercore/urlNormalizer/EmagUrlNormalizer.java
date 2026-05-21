@@ -18,8 +18,8 @@ public class EmagUrlNormalizer implements UrlNormalizer {
             rawHref = rawHref.substring(0, hashIndex);
         }
         rawHref = lowercase(rawHref);
-        rawHref = removeTrailingSlash(rawHref);
-        return String.valueOf(URI.create(parentUrl).resolve(rawHref));
+        String result =  String.valueOf(URI.create(parentUrl).resolve(rawHref));
+        return removeTrailingSlash(result);
     }
 
     private String lowercase(String url) {

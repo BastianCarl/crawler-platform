@@ -21,6 +21,7 @@ public class EmagHrefExtractor implements HrefExtractor {
             "/pret,",
             "/stoc",
             "/noutati",
+            "/product-feedback",
             "/resigilate");
 
     @Override
