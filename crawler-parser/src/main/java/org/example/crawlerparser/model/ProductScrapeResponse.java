@@ -8,7 +8,29 @@ public record ProductScrapeResponse(
         String price,
         String currency,
         boolean inStock,
-        String imageUrl,
-        String sku,
         String source,
-        Instant scrapedAt) {}
+        Instant scrapedAt)
+{
+    @Override
+    public String toString() {
+        return """
+            ProductScrapeResponse {
+                url='%s',
+                title='%s',
+                price='%s %s',
+                inStock=%s,
+                source='%s',
+                scrapedAt=%s
+            }
+            """.formatted(
+                url,
+                title,
+                price,
+                currency,
+                inStock,
+                source,
+                scrapedAt
+        );
+    }
+}
+
