@@ -22,20 +22,19 @@ public class EmagHrefExtractor implements HrefExtractor {
             "/stoc",
             "/noutati",
             "/product-feedback",
-            "/resigilate");
+            "/resigilate"
+    );
 
     @Override
     public Set<String> extract(FetchResult result) {
-
         Document doc = Jsoup.parse(result.html());
-
         return doc.select("a[href]").stream()
                 .map(element -> element.attr("href"))
-                .filter(this::isAllowedUrl)
+                .filter(this::isAllowedHref)
                 .collect(Collectors.toSet());
     }
 
-    private boolean isAllowedUrl(String href) {
+    private boolean isAllowedHref(String href) {
         return BLOCKED_PATHS.stream().noneMatch(href::contains) && isValidHref(href);
     }
 

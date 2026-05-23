@@ -56,7 +56,7 @@ public class CrawlJobValidator {
     public Set<String> collectCrawlableUrls(CrawlJob parentJob, int maxDepth, Set<String> links) {
         Set<String> filtered = new HashSet<>();
         for (String link : links) {
-            if (isValid(link, parentJob.depth() + 1, maxDepth) && isSameDomainAsParent(link, parentJob.url())) {
+            if (isValid(link, parentJob.depth() + 1, maxDepth) && isSameDomainAsParent( parentJob.url(), link)) {
                 filtered.add(link);
             }
         }

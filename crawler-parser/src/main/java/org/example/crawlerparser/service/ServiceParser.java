@@ -7,6 +7,7 @@ import org.example.crawlerfetcher.FetchService;
 import org.example.crawlerparser.hrefExtractor.EmagHrefExtractor;
 import org.example.crawlerparser.model.ParsingResult;
 import org.example.crawlerparser.model.ProductScrapeResponse;
+import org.example.crawlerparser.model.ScrapeResponse;
 import org.example.crawlerparser.pageTypeDetector.PageType;
 import org.example.crawlerparser.productParser.EmagProductParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class ServiceParser {
 
     public ParsingResult scrape(PageType pageType, FetcherRequest fetcherRequest) {
         FetchResult fetchResult = fetchService.fetch(fetcherRequest);
-        ProductScrapeResponse productScrapeResponse = emagProductParser.parse(pageType, fetchResult);
+        ScrapeResponse scrapeResponse = emagProductParser.parse(pageType, fetchResult);
         Set<String> href = emagLinkExtractor.extract(fetchResult);
-        return new ParsingResult(productScrapeResponse, href);
+        return new ParsingResult(scrapeResponse, href);
     }
 }

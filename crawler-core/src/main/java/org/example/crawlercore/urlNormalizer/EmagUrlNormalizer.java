@@ -1,25 +1,44 @@
 package org.example.crawlercore.urlNormalizer;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Set;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmagUrlNormalizer implements UrlNormalizer {
+    private static final Path VISITED_URLS_FILE = Paths.get("visited-urls2.txt");
 
     @Override
     public String normalize(String parentUrl, String rawHref) {
-        int queryIndex = rawHref.indexOf("?");
-        if (queryIndex != -1) {
-            rawHref = rawHref.substring(0, queryIndex);
+        try {
+            int queryIndex = rawHref.indexOf("?");
+            if (queryIndex != -1) {
+                rawHref = rawHref.substring(0, queryIndex);
+            }
+            int hashIndex = rawHref.indexOf("#");
+            if (hashIndex != -1) {
+                rawHref = rawHref.substring(0, hashIndex);
+            }
+            rawHref = lowercase(rawHref);
+            String result = String.valueOf(URI.create(parentUrl).resolve(rawHref));
+            return removeTrailingSlash(result);
+        } catch (Exception e) {
+                try {
+                    Files.writeString(
+                            VISITED_URLS_FILE,
+                            rawHref + System.lineSeparator(),
+                            StandardOpenOption.CREATE,
+                            StandardOpenOption.APPEND);
+                } catch (IOException ex) {
+                    throw new RuntimeException("Failed to write to visited URLs file", ex);
+                }
         }
-        int hashIndex = rawHref.indexOf("#");
-        if (hashIndex != -1) {
-            rawHref = rawHref.substring(0, hashIndex);
-        }
-        rawHref = lowercase(rawHref);
-        String result =  String.valueOf(URI.create(parentUrl).resolve(rawHref));
-        return removeTrailingSlash(result);
+        return null;
     }
 
     private String lowercase(String url) {

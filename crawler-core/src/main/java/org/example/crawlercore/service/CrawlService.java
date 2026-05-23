@@ -15,10 +15,14 @@ import org.example.crawlercore.urlFrontier.InMemoryUrlFrontier;
 import org.example.crawlercore.urlNormalizer.EmagUrlNormalizer;
 import org.example.crawlercore.validator.CrawlJobValidator;
 import org.example.crawlerparser.model.ParsingResult;
+import org.example.crawlerparser.model.ProductMapper;
 import org.example.crawlerparser.model.ProductScrapeResponse;
+import org.example.crawlerparser.model.ScrapeResponse;
 import org.example.crawlerparser.pageTypeDetector.EmagPageTypeDetector;
 import org.example.crawlerparser.pageTypeDetector.PageType;
+import org.example.crawlerparser.respository.ProductRepository;
 import org.example.crawlerparser.service.ServiceParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,21 +33,20 @@ public class CrawlService {
     private final EmagUrlNormalizer normalizer;
     private final CrawlJobValidator crawlJobValidator;
     private final EmagPageTypeDetector pageTypeDetector;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
     private static final int MAX_DEPTH = 2;
     private static final Path VISITED_URLS_FILE = Paths.get("visited-urls2.txt");
 
 
-    public CrawlService(ServiceParser serviceParser,
-                        InMemoryUrlFrontier urlFrontier,
-                        EmagUrlNormalizer normalizer,
-                        CrawlJobValidator crawlJobValidator,
-                        EmagPageTypeDetector pageTypeDetector
-    ) {
+    public CrawlService(ServiceParser serviceParser, InMemoryUrlFrontier urlFrontier, EmagUrlNormalizer normalizer, CrawlJobValidator crawlJobValidator, EmagPageTypeDetector pageTypeDetector, ProductRepository productRepository, ProductMapper productMapper) {
         this.serviceParser = serviceParser;
         this.urlFrontier = urlFrontier;
         this.normalizer = normalizer;
         this.crawlJobValidator = crawlJobValidator;
         this.pageTypeDetector = pageTypeDetector;
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
     public void crawl(String rootUrl) {
@@ -64,20 +67,10 @@ public class CrawlService {
             links = crawlJobValidator.collectCrawlableUrls(currentCrawlJob, MAX_DEPTH, links);
             int currentDepth = currentCrawlJob.depth();
             links.forEach(url -> urlFrontier.push(new CrawlJob(url, currentDepth + 1, pageTypeDetector.getType(url))));
-            saveVisitedUrl(parsingResult.productScrapeResponse());
+            if (parsingResult.productScrapeResponse() instanceof ProductScrapeResponse productResponse) {
+                productRepository.save(productMapper.toEntity(productResponse));
+            }
         }
     }
 
-    private void saveVisitedUrl(ProductScrapeResponse response) {
-        try {
-            Files.writeString(
-                    VISITED_URLS_FILE,
-                    response.toString() + System.lineSeparator(),
-                    StandardOpenOption.CREATE,
-                    StandardOpenOption.APPEND);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

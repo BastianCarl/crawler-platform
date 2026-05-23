@@ -1,11 +1,14 @@
 package org.example.crawlerparser.productParser;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.example.browserworkerclient.dto.FetchResult;
+import org.example.crawlerparser.model.NonProductScrapeResponse;
 import org.example.crawlerparser.model.ProductScrapeResponse;
+import org.example.crawlerparser.model.ScrapeResponse;
 import org.example.crawlerparser.pageTypeDetector.PageType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,15 +20,15 @@ public class EmagProductParser implements ProductParser {
     private static final String PRICE_SELECTOR = ".product-new-price";
 
     @Override
-    public ProductScrapeResponse parse(PageType pageType, FetchResult result) {
+    public ScrapeResponse parse(PageType pageType, FetchResult result) {
         Document doc = Jsoup.parse(result.html());
         String title = extractTitle(doc);
         if (pageType == PageType.PRODUCT) {
             String price = extractPrice(doc);
             boolean isInStock = extractInStock(doc);
-            return new ProductScrapeResponse(result.url(), title, price, "RON", isInStock, "emag", Instant.now());
+            return new ProductScrapeResponse(result.url(), title, new BigDecimal(price), "RON", isInStock, "emag", Instant.now());
         } else {
-            return new ProductScrapeResponse(result.url(), title, null, null, true, "emag", Instant.now());
+            return new NonProductScrapeResponse(result.url(), title, "emag", Instant.now());
         }
     }
 
