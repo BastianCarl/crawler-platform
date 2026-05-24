@@ -1,12 +1,12 @@
 package org.example.crawlerparser.service;
 
+import java.util.Optional;
 import java.util.Set;
 import org.example.browserworkerclient.dto.FetchResult;
 import org.example.browserworkerclient.dto.FetcherRequest;
 import org.example.crawlerfetcher.FetchService;
 import org.example.crawlerparser.hrefExtractor.EmagHrefExtractor;
 import org.example.crawlerparser.model.ParsingResult;
-import org.example.crawlerparser.model.ProductScrapeResponse;
 import org.example.crawlerparser.model.ScrapeResponse;
 import org.example.crawlerparser.pageTypeDetector.PageType;
 import org.example.crawlerparser.productParser.EmagProductParser;
@@ -30,7 +30,7 @@ public class ServiceParser {
 
     public ParsingResult scrape(PageType pageType, FetcherRequest fetcherRequest) {
         FetchResult fetchResult = fetchService.fetch(fetcherRequest);
-        ScrapeResponse scrapeResponse = emagProductParser.parse(pageType, fetchResult);
+        Optional<ScrapeResponse> scrapeResponse = emagProductParser.parse(pageType, fetchResult);
         Set<String> href = emagLinkExtractor.extract(fetchResult);
         return new ParsingResult(scrapeResponse, href);
     }

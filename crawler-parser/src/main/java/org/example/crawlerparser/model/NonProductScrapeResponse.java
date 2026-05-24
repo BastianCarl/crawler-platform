@@ -1,12 +1,10 @@
 package org.example.crawlerparser.model;
 
 import java.time.Instant;
-public record NonProductScrapeResponse (
-        String url,
-        String title,
-        String source,
-        Instant scrapedAt) implements ScrapeResponse
-{    @Override
+
+public record NonProductScrapeResponse(String url, String title, String source, Instant scrapedAt)
+        implements ScrapeResponse {
+    @Override
     public String toString() {
         return """
             NonProductScrapeResponse {
@@ -15,11 +13,7 @@ public record NonProductScrapeResponse (
                 source='%s',
                 scrapedAt=%s
             }
-            """.formatted(
-                url,
-                title,
-                source,
-                scrapedAt
-        );
+            """
+                .formatted(url, title, source, scrapedAt);
     }
 }

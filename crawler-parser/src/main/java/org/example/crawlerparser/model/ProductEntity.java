@@ -39,8 +39,7 @@ public class ProductEntity {
     @Column(name = "last_seen_at", nullable = false)
     private Instant lastSeenAt;
 
-    public ProductEntity() {
-    }
+    public ProductEntity() {}
 
     public Long getId() {
         return id;

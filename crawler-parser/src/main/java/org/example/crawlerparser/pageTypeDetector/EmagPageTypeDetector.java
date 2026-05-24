@@ -1,4 +1,5 @@
 package org.example.crawlerparser.pageTypeDetector;
+
 import org.springframework.stereotype.Component;
 
 @Component

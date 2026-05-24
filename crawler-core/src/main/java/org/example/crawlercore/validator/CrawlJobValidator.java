@@ -1,13 +1,12 @@
 package org.example.crawlercore.validator;
 
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 import org.example.crawlercore.model.CrawlJob;
 import org.example.crawlercore.urlDeduplicator.InMemoryUrlDeduplicator;
 import org.example.crawlercore.urlFilter.EmagUrlFilter;
 import org.springframework.stereotype.Component;
-
-import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class CrawlJobValidator {
@@ -56,7 +55,7 @@ public class CrawlJobValidator {
     public Set<String> collectCrawlableUrls(CrawlJob parentJob, int maxDepth, Set<String> links) {
         Set<String> filtered = new HashSet<>();
         for (String link : links) {
-            if (isValid(link, parentJob.depth() + 1, maxDepth) && isSameDomainAsParent( parentJob.url(), link)) {
+            if (isValid(link, parentJob.depth() + 1, maxDepth) && isSameDomainAsParent(parentJob.url(), link)) {
                 filtered.add(link);
             }
         }

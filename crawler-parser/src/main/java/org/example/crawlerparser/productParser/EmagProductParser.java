@@ -1,10 +1,8 @@
 package org.example.crawlerparser.productParser;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.example.browserworkerclient.dto.FetchResult;
 import org.example.crawlerparser.model.NonProductScrapeResponse;
 import org.example.crawlerparser.model.ProductScrapeResponse;
@@ -13,22 +11,32 @@ import org.example.crawlerparser.pageTypeDetector.PageType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmagProductParser implements ProductParser {
     private static final String PRICE_SELECTOR = ".product-new-price";
+    private static final Logger log = LoggerFactory.getLogger(EmagProductParser.class);
 
     @Override
-    public ScrapeResponse parse(PageType pageType, FetchResult result) {
-        Document doc = Jsoup.parse(result.html());
-        String title = extractTitle(doc);
-        if (pageType == PageType.PRODUCT) {
-            String price = extractPrice(doc);
-            boolean isInStock = extractInStock(doc);
-            return new ProductScrapeResponse(result.url(), title, new BigDecimal(price), "RON", isInStock, "emag", Instant.now());
-        } else {
-            return new NonProductScrapeResponse(result.url(), title, "emag", Instant.now());
+    public Optional<ScrapeResponse> parse(PageType pageType, FetchResult result) {
+        try {
+
+            Document doc = Jsoup.parse(result.html());
+            String title = extractTitle(doc);
+            if (pageType == PageType.PRODUCT) {
+                String price = extractPrice(doc);
+                boolean isInStock = extractInStock(doc);
+                return Optional.of(new ProductScrapeResponse(
+                        result.url(), title, new BigDecimal(price), "RON", isInStock, "emag", Instant.now()));
+            } else {
+                return Optional.of(new NonProductScrapeResponse(result.url(), title, "emag", Instant.now()));
+            }
+        } catch (Exception e) {
+            log.warn("Failed to parse product page: {}, error: {}", result.url(), e.getMessage());
+            return Optional.empty();
         }
     }
 
@@ -37,17 +45,11 @@ public class EmagProductParser implements ProductParser {
         if (priceElement == null) {
             return null;
         }
-        String whole = priceElement.ownText()
-                .replace(".", "")
-                .replace(",", "")
-                .trim();
+        String whole = priceElement.ownText().replace(".", "").replace(",", "").trim();
         Element supElement = priceElement.selectFirst("sup");
         String decimal = "00";
         if (supElement != null) {
-            decimal = supElement.text()
-                    .replace(",", "")
-                    .replace(".", "")
-                    .trim();
+            decimal = supElement.text().replace(",", "").replace(".", "").trim();
         }
         return whole + "." + decimal;
     }
@@ -66,8 +68,7 @@ public class EmagProductParser implements ProductParser {
         if (title == null || title.isBlank()) {
             return null;
         }
-        title = title.replace(" - eMAG.ro", "")
-                .trim();
+        title = title.replace(" - eMAG.ro", "").trim();
         return title;
     }
 }

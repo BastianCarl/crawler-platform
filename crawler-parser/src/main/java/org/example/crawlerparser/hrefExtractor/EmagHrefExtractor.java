@@ -22,8 +22,7 @@ public class EmagHrefExtractor implements HrefExtractor {
             "/stoc",
             "/noutati",
             "/product-feedback",
-            "/resigilate"
-    );
+            "/resigilate");
 
     @Override
     public Set<String> extract(FetchResult result) {

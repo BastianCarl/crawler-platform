@@ -1,6 +1,8 @@
 package org.example.crawlercore.urlNormalizer;
 
+import java.util.Optional;
+
 public interface UrlNormalizer {
 
-    String normalize(String baseUrl, String rawHref);
+    Optional<String> normalize(String baseUrl, String rawHref);
 }
